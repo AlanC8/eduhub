@@ -1,42 +1,89 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useAuth } from '../hooks/useAuth';
+import { Role } from '../../types';
+
+interface NavItem {
+  href: string;
+  icon: string;
+  label: string;
+  roles: Role[];
+}
+
+const navItems: NavItem[] = [
+  { href: '/',          icon: 'dashboard',              label: 'Главная',   roles: ['student', 'admin'] },
+  { href: '/study',     icon: 'school',                 label: 'Учёба',     roles: ['student', 'admin'] },
+  { href: '/materials', icon: 'auto_stories',           label: 'Материалы', roles: ['student', 'teacher', 'admin'] },
+  { href: '/people',    icon: 'groups',                 label: 'Люди',      roles: ['student', 'teacher', 'admin'] },
+  { href: '/mail',      icon: 'email',                  label: 'Почта',     roles: ['student', 'teacher', 'admin'] },
+  { href: '/finance',   icon: 'account_balance_wallet', label: 'Финансы',   roles: ['admin'] },
+  { href: '/services',  icon: 'apps',                   label: 'Сервисы',   roles: ['student', 'teacher', 'admin'] },
+  { href: '/teacher',   icon: 'assignment_ind',         label: 'Препод.',   roles: ['teacher', 'admin'] },
+  { href: '/admin',     icon: 'admin_panel_settings',   label: 'Админ',     roles: ['admin'] },
+];
 
 export default function Sidebar() {
+  const pathname = usePathname();
+  const { role, logout } = useAuth();
+
+  // Фильтруем навигационные элементы по ролям
+  const filteredNavItems = navItems.filter(item => 
+    role && item.roles.includes(role)
+  );
+
   return (
-    <div className="w-[70px] lg:w-[76px] bg-gradient-to-b from-[#0f172a] to-[#1e293b] flex flex-col items-center fixed h-full z-10 shadow-2xl border-r border-white/10">
-      {/* Лого */}
-      <div className="py-6">
-        <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shadow-inner backdrop-blur-sm">
-          <span className="text-xl text-white font-bold">E</span>
+    <aside className="fixed z-10 flex h-full w-[70px] lg:w-[76px] flex-col items-center
+                      border-r border-gray-200 bg-white shadow-sm">
+      {/* Logo */}
+      <div className="py-6 text-center">
+        <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-violet-600 text-xl font-bold text-white shadow-inner">
+          E
         </div>
-        <div className="text-[11px] text-gray-300 mt-2 font-medium">EDUHUB</div>
+        <span className="mt-1 block text-[10px] font-medium tracking-wider text-gray-600">
+          EDUHUB
+        </span>
       </div>
 
-      {/* Навигация */}
-      <div className="flex flex-col space-y-2 mt-10 w-full px-1">
-        {[
-          { href: '/', icon: 'dashboard', label: 'Главная' },
-          { href: '#', icon: 'school', label: 'Учеба' },
-          { href: '#', icon: 'auto_stories', label: 'Материалы' },
-          { href: '#', icon: 'groups', label: 'Люди' },
-          { href: '#', icon: 'email', label: 'Почта' },
-          { href: '#', icon: 'account_balance_wallet', label: 'Финансы' },
-          { href: '#', icon: 'apps', label: 'Сервисы' },
-        ].map((item, i) => (
-          <Link key={i} href={item.href} className="group text-gray-300 hover:text-white w-full py-3 flex flex-col items-center relative transition-all">
-            <div className="absolute inset-0 bg-white/5 scale-0 rounded-xl group-hover:scale-100 transition-transform duration-300"></div>
-            <div className="absolute left-0 w-1 h-10 rounded-r-lg bg-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <span className="material-icons-round z-10 mb-1 text-lg">{item.icon}</span>
-            <span className="text-[10px] z-10">{item.label}</span>
-          </Link>
-        ))}
-      </div>
+      {/* Navigation */}
+      <nav className="mt-8 flex w-full flex-col space-y-1 px-1">
+        {filteredNavItems.map(({ href, icon, label }) => {
+          const active = pathname === href;
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={`group relative flex flex-col items-center rounded-xl py-3
+                          ${active ? '' : ''}`}
+            >
+              {active && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r bg-violet-600" />
+              )}
 
-      {/* Настройки */}
-      <div className="mt-auto mb-6">
-        <button className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-white/10 transition-all duration-300">
+              <span className="material-icons-round text-lg">{icon}</span>
+              <span className="mt-0.5 text-[10px] leading-none text-black font-medium mt-2">{label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Settings and Logout */}
+      <div className="mt-auto mb-6 flex flex-col space-y-2">
+        <button
+          aria-label="Настройки"
+          className="rounded-full p-2 text-black hover:bg-gray-100 transition"
+        >
           <span className="material-icons-round">settings</span>
         </button>
+        <button
+          onClick={logout}
+          aria-label="Выйти"
+          className="rounded-full p-2 text-red-600 hover:bg-red-50 transition"
+        >
+          <span className="material-icons-round">logout</span>
+        </button>
       </div>
-    </div>
+    </aside>
   );
 }

@@ -20,27 +20,23 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
 
   return (
     <header className="flex justify-between items-center px-6 py-3 border-b bg-white/70 backdrop-blur-md sticky top-0 z-10 shadow-soft">
-      {/* ─────────── Левая зона (бургер / лого) ─────────── */}
       <div className="flex items-center">
-        <span className="material-icons-round text-black mr-2">grid_view</span>
-        <span className="text-gray-600 hidden sm:inline">Dashboard</span>
+        <span className="material-icons-round text-black mr-2"> </span>
+        <span className="text-gray-600 hidden sm:inline"> </span>
       </div>
 
-      {/* ─────────── Центральная зона (поиск + язык + map) ─────────── */}
       <div className="flex items-center space-x-3">
-        {/* Поиск (убираем на мобиле) */}
-        <form className="hidden md:flex relative max-w-xs">
+        <form className="hidden md:flex relative max-w-xs ">
           <input
             type="text"
             placeholder="Поиск..."
-            className="py-2 pl-9 pr-4 w-full rounded-full text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/40"
+            className="py-2 pl-9 pr-4 w-full rounded-full text-black text-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
           <span className="material-icons-round text-gray-400 absolute left-3 top-2">
             search
           </span>
         </form>
 
-        {/* Кнопка «Карта сайта» */}
         <Link
           href="/map"
           className={`${activePage === 'map'
@@ -52,30 +48,15 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
           <span className="hidden sm:inline">Карта сайта</span>
         </Link>
 
-        {/* Переключатель языков */}
-        <div className="flex items-center bg-gray-100 px-2 py-1 rounded-full">
-          <button className="px-2 py-1 hover:text-primary transition-colors">
-            KZ
-          </button>
-          <span className="text-gray-300">|</span>
-          <button className="px-2 py-1 text-primary font-medium">RU</button>
-          <span className="text-gray-300">|</span>
-          <button className="px-2 py-1 hover:text-primary transition-colors">
-            EN
-          </button>
-        </div>
-
-        {/* Уведомления */}
         <NotificationsDropdown />
 
-        {/* Сообщения (e-mail) */}
         <div className="relative">
           <button
             className="text-gray-600 relative p-2 rounded-full hover:bg-gray-100 transition-colors"
             onClick={() => setShowEmailDropdown(!showEmailDropdown)}
           >
             <span className="material-icons-round">email</span>
-            <span className="bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center absolute -top-1 -right-1 shadow-md">
+            <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center absolute -top-1 -right-1 shadow-md">
               3
             </span>
           </button>
@@ -159,7 +140,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
         {/* Аватар / выпадающее меню */}
         <div className="relative group">
           <button className="overflow-hidden rounded-full flex items-center justify-center transition-all hover:ring-2 hover:ring-primary/30">
-            <div className="w-9 h-9 bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-medium">
+            <div className="w-9 h-9 bg-gradient-to-br from-red-500 to-blue-500 flex items-center justify-center text-white font-medium">
               AЖ
             </div>
           </button>

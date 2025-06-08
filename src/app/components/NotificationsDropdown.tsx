@@ -69,7 +69,7 @@ export default function NotificationsDropdown() {
       >
         <span className="material-icons-round">notifications</span>
         {unreadCount > 0 && (
-          <span className="bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center absolute -top-1 -right-1 shadow-md animate-pulse">
+          <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center absolute -top-1 -right-1 shadow-md animate-pulse">
             {unreadCount}
           </span>
         )}
