@@ -81,7 +81,6 @@ export const useAssignments = (studentId: number, disciplineId: number) => {
   }, [assignmentsService, studentId]);
 
   const downloadFile = useCallback(async (fileId: number, filename: string) => {
-    // Не меняем состояние loading для скачивания, это фоновая операция
     try {
       const blob = await assignmentsService.downloadFile(fileId);
       const url = window.URL.createObjectURL(blob);
@@ -95,48 +94,21 @@ export const useAssignments = (studentId: number, disciplineId: number) => {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : `Не удалось скачать файл ${filename}`;
       console.error(`Error downloading file ${fileId}:`, error);
-      // Можно установить состояние ошибки, если нужно уведомить пользователя
-      setState(prev => ({ ...prev, error: errorMessage })); // Показываем ошибку
-      // alert(`Не удалось скачать файл: ${filename}`); // Или используем alert
+      setState(prev => ({ ...prev, error: errorMessage }));
     }
   }, [assignmentsService]);
 
-  const submitStudentAssignment = useCallback(async (assignmentId: number, comment: string | null, files: File[] | null) => {
-    if (!studentId) {
-        console.warn("Student ID is not provided for submitStudentAssignment.");
-        setState(prev => ({ ...prev, error: "Необходим ID студента для сдачи задания", loading: false }));
-        throw new Error("Student ID is required");
-    }
-    setState(prev => ({ ...prev, loading: true, error: null })); // Используем основной loading
-    try {
-      const response = await assignmentsService.submitAssignment(assignmentId, comment, files);
-      setState(prev => ({ ...prev, loading: false }));
-      // После успешной сдачи, обновляем список заданий (например, текущим фильтром)
-      fetchAssignmentsList(state.currentFilter);
-      return response.data; // Возвращаем данные о сдаче
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Не удалось отправить задание';
-      console.error("Error in submitStudentAssignment:", errorMessage, error);
-      setState(prev => ({ ...prev, error: errorMessage, loading: false }));
-      throw error;
-    }
-  }, [assignmentsService, studentId, fetchAssignmentsList, state.currentFilter]);
-
-  // Функция для смены фильтра
   const changeFilter = useCallback((newFilter: AssignmentFilter) => {
     fetchAssignmentsList(newFilter);
   }, [fetchAssignmentsList]);
 
-  // Первичная загрузка данных при монтировании или изменении studentId/disciplineId
   useEffect(() => {
     if (studentId && disciplineId) {
       fetchAssignmentsList(state.currentFilter);
     } else {
-      // Если ID нет, можно очистить список или показать сообщение
       setState(prev => ({...prev, assignments: [], error: "Выберите студента и дисциплину"}));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [studentId, disciplineId]); // Загружаем только при изменении ID, фильтр меняется через changeFilter
+  }, [studentId, disciplineId]);
 
   const clearError = useCallback(() => {
     setState(prev => ({ ...prev, error: null }));
@@ -150,7 +122,6 @@ export const useAssignments = (studentId: number, disciplineId: number) => {
     setState(prev => ({ ...prev, isDeleting: true, error: null }));
     try {
       await assignmentsService.deleteAssignment(assignmentId);
-      // После успешного удаления обновляем список
       setState(prev => ({
         ...prev,
         assignments: prev.assignments.filter(a => a.assignmentId !== assignmentId),
@@ -166,10 +137,8 @@ export const useAssignments = (studentId: number, disciplineId: number) => {
 
   return {
     ...state,
-    // fetchAssignmentsList, // переименовал для ясности, что это список
     fetchAssignmentById,
     downloadFile,
-    submitStudentAssignment, // новый метод
     changeFilter,
     clearError,
     clearSelectedAssignmentDetail,

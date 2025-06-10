@@ -1,6 +1,23 @@
 import Interceptor from './Interceptor';
 import { UsersListResponse, UserDetailResponse, UserGroupsResponse } from '../types';
 
+// Добавляем интерфейс для ответа текущего пользователя
+export interface CurrentUserResponse {
+  data: {
+    enabled: boolean;
+    fio: string;
+    is_admin: boolean;
+    is_service: boolean;
+    is_student: boolean;
+    local: boolean;
+    login: string;
+    password: string;
+    position: string;
+    sid: string;
+    user_id: number;
+  };
+}
+
 class UsersService {
   private static instance: UsersService;
   private interceptor = Interceptor.getInstance();
@@ -32,9 +49,9 @@ class UsersService {
    * Получить пользователя по ID
    * GET /settings/users/{id}
    */
-  public async getUserById(userId: number): Promise<UserDetailResponse> {
+  public async getUserById(userId: number): Promise<CurrentUserResponse> {
     try {
-      const response = await this.interceptor.getAxiosInstance().get<UserDetailResponse>(`/settings/users/${userId}`);
+      const response = await this.interceptor.getAxiosInstance().get<CurrentUserResponse>(`/settings/users/${userId}`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching user ${userId}:`, error);

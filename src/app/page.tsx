@@ -7,6 +7,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Calendar from './components/calendar/Calendar';
 import ProtectedRoute from './components/ProtectedRoute';
+import { useUsers } from './hooks/useUsers';
 
 const stats = [
   { icon: 'assignment', label: 'Задания', value: '24', sub: '4 просрочено' },
@@ -16,6 +17,8 @@ const stats = [
 ];
 
 export default function Home() {
+  const { currentUser, loading, error } = useUsers();
+  
   const today = useMemo(
     () =>
       new Intl.DateTimeFormat('ru-RU', {
@@ -26,6 +29,28 @@ export default function Home() {
       }).format(new Date()),
     [],
   );
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="flex items-center gap-3 rounded-xl border border-indigo-100 bg-white px-6 py-3 shadow-sm">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent"></div>
+          <span className="text-indigo-600">Загрузка...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700">
+          <h3 className="mb-2 font-medium">Ошибка загрузки данных</h3>
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <ProtectedRoute allowedRoles={['student', 'admin']}>
@@ -41,8 +66,31 @@ export default function Home() {
             {/* Hero — нейтральная карточка */}
             <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-6 flex flex-col md:flex-row justify-between gap-6">
               <div>
-                <h1 className="text-2xl font-semibold">Добро пожаловать, Алан!</h1>
-                <p className="text-sm text-gray-500 mt-1">{today} · Весенний семестр</p>
+                <h1 className="text-2xl font-semibold">
+                  Добро пожаловать, {currentUser?.fio || 'Пользователь'}!
+                </h1>
+                <p className="text-sm text-gray-500 mt-1">
+                  {today} · Весенний семестр
+                </p>
+                {currentUser && (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {currentUser.is_admin && (
+                      <span className="inline-flex items-center rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800">
+                        Администратор
+                      </span>
+                    )}
+                    {currentUser.is_student && (
+                      <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
+                        Студент
+                      </span>
+                    )}
+                    {currentUser.position && (
+                      <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
+                        {currentUser.position}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center gap-2">
@@ -50,7 +98,9 @@ export default function Home() {
                   <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
                 </span>
-                <span className="text-sm">Вы в сети</span>
+                <span className="text-sm">
+                  {currentUser?.enabled ? 'Активный пользователь' : 'Неактивный пользователь'}
+                </span>
               </div>
             </div>
 
@@ -79,7 +129,9 @@ export default function Home() {
             <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-6 flex flex-col md:flex-row justify-between items-center gap-6">
               <div>
                 <h2 className="text-lg font-medium mb-1">EduHub в телефоне</h2>
-                <p className="text-sm text-gray-500">Скачай приложение и получай уведомления.</p>
+                <p className="text-sm text-gray-500">
+                  {currentUser?.login}, скачай приложение и получай уведомления.
+                </p>
                 <div className="flex gap-3 mt-4">
                   {['apple', 'android'].map((p) => (
                     <button

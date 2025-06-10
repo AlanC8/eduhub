@@ -61,7 +61,7 @@ export default function UsersExample() {
           </div>
           <button 
             onClick={clearError}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-101 shadow-lg"
           >
             <span className="text-lg">✕</span>
             Закрыть
@@ -117,9 +117,9 @@ export default function UsersExample() {
               return (
                 <div 
                   key={user.user_id}
-                  className={`group relative overflow-hidden rounded-2xl p-4 border-2 cursor-pointer transition-all duration-300 ${
+                  className={`group relative overflow-hidden m-2 rounded-2xl p-4 border-2 cursor-pointer transition-all duration-300 ${
                     selectedUserId === user.user_id 
-                      ? 'border-blue-300 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-lg transform scale-105' 
+                      ? 'border-blue-300 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-lg transform scale-101' 
                       : 'border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-gray-100 hover:shadow-md'
                   }`}
                   onClick={() => handleUserSelect(user.user_id)}

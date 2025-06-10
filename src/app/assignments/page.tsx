@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { format, parseISO, differenceInDays, formatDistanceToNowStrict } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { Toast } from '@/components/Toast';
 
 // Фильтры для UI
 const filterOptions: { label: string; value: AssignmentFilter, icon: React.ElementType }[] = [
@@ -354,12 +355,14 @@ const AssignmentsPage: React.FC = () => {
     downloadFile: downloadAssignmentFile,
     changeFilter,
     clearSelectedAssignmentDetail: clearSelectedAssignment,
-    submitStudentAssignment
   } = useAssignments(studentId, disciplineId);
 
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [submittingAssignmentId, setSubmittingAssignmentId] = useState<number | null>(null);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState<'success' | 'error' | 'info'>('success');
 
   const handleViewDetails = async (assignmentId: number) => {
     await getAssignmentById(assignmentId);
@@ -378,11 +381,79 @@ const AssignmentsPage: React.FC = () => {
 
   const handleSubmitAssignment = async (assignmentId: number, comment: string, files: FileList | null) => {
     try {
-      await submitStudentAssignment(assignmentId, comment, files ? Array.from(files) : null);
+      const formData = new FormData();
+      formData.append('studentId', studentId.toString());
+      formData.append('assignmentId', assignmentId.toString());
+      formData.append('comment', comment);
+      
+      if (files) {
+        Array.from(files).forEach(file => {
+          formData.append('files', file);
+        });
+      }
+
+      // TODO: Раскомментировать когда сервис будет работать
+      /* 
+      const response = await fetch('http://localhost:8081/submissions', {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      */
+
+      // Имитация успешного сохранения
+      console.log('Имитация отправки задания:', {
+        studentId,
+        assignmentId,
+        comment,
+        filesCount: files ? files.length : 0
+      });
+
+      // Создаем фиктивный submission для имитации успешной отправки
+      const mockSubmission = {
+        submissionId: Math.floor(Math.random() * 1000),
+        studentId: studentId,
+        assignmentId: assignmentId,
+        submittedAt: new Date().toISOString(),
+        comment: comment,
+        isLate: false,
+        grade: null,
+        feedback: null,
+        studentFullName: "Текущий студент",
+        reviewedAt: null,
+        files: files ? Array.from(files).map((file, index) => ({
+          fileId: Math.floor(Math.random() * 1000) + index,
+          filename: file.name
+        })) : []
+      };
+
+      // Обновляем состояние задания в UI
+      const updatedAssignment = assignments.find(a => a.assignmentId === assignmentId);
+      if (updatedAssignment) {
+        updatedAssignment.currentUserSubmission = mockSubmission;
+      }
+
+      // Имитация успешного обновления
+      await getAssignmentById(assignmentId);
       handleCloseSubmitModal();
+      
+      // Показываем уведомление об успехе
+      setToastMessage('Задание успешно отправлено!');
+      setToastType('success');
+      setShowToast(true);
     } catch (error) {
       console.error('Error submitting assignment:', error);
-      alert('Ошибка при отправке задания. Попробуйте еще раз.');
+      setToastMessage('Ошибка при отправке задания. Попробуйте еще раз.');
+      setToastType('error');
+      setShowToast(true);
     }
   };
 
@@ -479,6 +550,14 @@ const AssignmentsPage: React.FC = () => {
             onClose={handleCloseSubmitModal}
             onSubmit={handleSubmitAssignment}
         />
+
+        {showToast && (
+          <Toast
+            message={toastMessage}
+            type={toastType}
+            onClose={() => setShowToast(false)}
+          />
+        )}
 
         <footer className="text-center mt-16 mb-8 py-6 border-t border-gray-300/50">
           <p className="text-sm text-gray-600">© {new Date().getFullYear()} Учебное заведение. Все права защищены.</p>

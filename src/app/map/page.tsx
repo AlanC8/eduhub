@@ -81,19 +81,13 @@ export default function SiteMap() {
                       </Link>
                     </li>
                     <li>
-                      <Link href="#" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
+                      <Link href="/assignments" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
                         <span className="material-icons-round text-gray-400 mr-3 group-hover:text-primary transition-colors">assignment</span>
                         <span>Задания</span>
                       </Link>
                     </li>
                     <li>
-                      <Link href="#" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
-                        <span className="material-icons-round text-gray-400 mr-3 group-hover:text-primary transition-colors">quiz</span>
-                        <span>Тестирование</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="#" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
+                      <Link href="/appeals" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
                         <span className="material-icons-round text-gray-400 mr-3 group-hover:text-primary transition-colors">gavel</span>
                         <span>Апелляции</span>
                       </Link>

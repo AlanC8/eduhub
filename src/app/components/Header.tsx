@@ -8,7 +8,7 @@ import NotificationsDropdown from './NotificationsDropdown';
  * Страницы, которые могут передаваться в Header.
  * Расширили список: теперь без ошибок собираются student/teacher/admin-экраны.
  */
-export type PageKey = 'home' | 'map' | 'student' | 'teacher' | 'admin';
+export type PageKey = 'home' | 'map' | 'student' | 'teacher' | 'admin' | 'appeals';
 
 interface HeaderProps {
   /** Какая страница сейчас активна (нужно для подсветки кнопок, если надо) */
@@ -19,7 +19,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
   const [showEmailDropdown, setShowEmailDropdown] = useState(false);
 
   return (
-    <header className="flex justify-between items-center px-6 py-3 border-b bg-white/70 backdrop-blur-md sticky top-0 z-10 shadow-soft">
+    <header className="flex justify-between items-center px-6 py-3 border-b bg-white/70 backdrop-blur-md sticky top-0 z-9999999 shadow-soft">
       <div className="flex items-center">
         <span className="material-icons-round text-black mr-2"> </span>
         <span className="text-gray-600 hidden sm:inline"> </span>

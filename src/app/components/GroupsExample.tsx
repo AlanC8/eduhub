@@ -97,11 +97,11 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
 
   // Conditional styles based on role
   const containerStyles = role === 'teacher' 
-    ? "bg-white rounded-3xl shadow-soft" 
+    ? "bg-white rounded-3xl shadow-2xl p-8" 
     : "p-8 max-w-7xl mx-auto";
 
   const cardStyles = role === 'teacher'
-    ? "bg-white rounded-2xl shadow-md border border-gray-100"
+    ? "bg-white rounded-2xl shadow-xl border border-gray-200"
     : "bg-white rounded-3xl shadow-xl border border-gray-100";
 
   const buttonGradient = role === 'teacher'
@@ -110,8 +110,8 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
 
   if (error) {
     return (
-      <div className={`p-4 bg-red-50 border border-red-200 rounded-lg ${role === 'teacher' ? 'mx-6' : ''}`}>
-        <h3 className="text-red-800 font-medium">Ошибка</h3>
+      <div className={`p-4 ${role === 'teacher' ? 'bg-red-50 border-red-200 text-red-800' : 'bg-red-50 border-red-200 text-red-800'} border rounded-lg ${role === 'teacher' ? 'mx-6' : ''}`}>
+        <h3 className="font-medium">Ошибка</h3>
         <p className="text-red-600">{error}</p>
         <button 
           onClick={clearError}
@@ -141,16 +141,16 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
       
       {loading && (
         <div className="mb-6 text-center">
-          <div className="inline-flex items-center gap-3 bg-blue-50 px-6 py-3 rounded-xl border border-blue-200">
-            <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-600 border-t-transparent"></div>
-            <span className="text-blue-700 font-medium">Загрузка...</span>
+          <div className={`inline-flex items-center gap-3 ${role === 'teacher' ? 'bg-violet-50 border-violet-200' : 'bg-blue-50 border-blue-200'} px-6 py-3 rounded-xl border`}>
+            <div className={`animate-spin rounded-full h-5 w-5 border-2 ${role === 'teacher' ? 'border-violet-500 border-t-transparent' : 'border-blue-600 border-t-transparent'}`}></div>
+            <span className={role === 'teacher' ? 'text-violet-700' : 'text-blue-700'}>Загрузка...</span>
           </div>
         </div>
       )}
 
       {/* Форма создания группы */}
       {showCreateForm && (
-        <div className={`${role === 'teacher' ? 'bg-white' : 'bg-gradient-to-br from-white to-blue-50/30'} rounded-3xl shadow-xl border border-blue-100 p-8 mb-8`}>
+        <div className={`${role === 'teacher' ? 'bg-white border-violet-200' : 'bg-gradient-to-br from-white to-blue-50/30 border-blue-100'} rounded-3xl shadow-xl border p-8 mb-8`}>
           <div className="flex items-center gap-3 mb-6">
             <div className="text-3xl">✨</div>
             <div>
@@ -162,7 +162,7 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
           <form onSubmit={handleCreateGroup} className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700">
+                <label className="block text-sm font-semibold text-black">
                   Название группы *
                 </label>
                 <input
@@ -205,7 +205,7 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
               />
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-6 space-y-4">
+            <div className={`${role === 'teacher' ? 'bg-violet-50' : 'bg-gray-50'} rounded-2xl p-6 space-y-4`}>
               <h4 className="font-semibold text-gray-800 mb-3">Настройки группы</h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <label className="flex items-center gap-3 cursor-pointer">
@@ -244,7 +244,7 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:transform-none"
+                className={`flex items-center gap-2 px-8 py-3 bg-gradient-to-r ${role === 'teacher' ? 'from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700' : 'from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700'} text-white rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:transform-none`}
               >
                 <span className="text-lg">✅</span>
                 Создать группу
@@ -252,7 +252,7 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
               <button
                 type="button"
                 onClick={() => setShowCreateForm(false)}
-                className="flex items-center gap-2 px-8 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-all duration-300"
+                className={`flex items-center gap-2 px-8 py-3 ${role === 'teacher' ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'} rounded-xl transition-all duration-300`}
               >
                 <span className="text-lg">↩️</span>
                 Отмена
@@ -268,7 +268,7 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
           <div className="flex items-center gap-3 mb-6">
             <div className="text-2xl">🏫</div>
             <div>
-              <h3 className="text-xl font-bold text-gray-800">Список групп</h3>
+              <h3 className="text-xl font-bold text-black">Список групп</h3>
               <p className="text-gray-600">Всего групп: {total}</p>
             </div>
           </div>
@@ -277,20 +277,22 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
             {(groups || []).map((group) => (
               <div 
                 key={group.group_id}
-                className={`group relative overflow-hidden rounded-2xl p-4 border-2 cursor-pointer transition-all duration-300 ${
+                className={`group relative overflow-hidden rounded-2xl p-4 border-2 m-2 cursor-pointer transition-all duration-300 ${
                   selectedGroupId === group.group_id 
-                    ? `border-${role === 'teacher' ? 'violet' : 'blue'}-300 bg-gradient-to-r ${
-                        role === 'teacher' 
-                          ? 'from-violet-50 to-purple-50'
-                          : 'from-blue-50 to-indigo-50'
-                      } shadow-lg transform scale-105` 
-                    : 'border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-gray-100 hover:shadow-md'
+                    ? `${role === 'teacher' 
+                        ? 'border-violet-500 bg-violet-50'
+                        : 'border-blue-300 bg-gradient-to-r from-blue-50 to-indigo-50'
+                      } shadow-lg transform scale-101` 
+                    : `${role === 'teacher'
+                        ? 'border-gray-200 bg-white hover:border-violet-200 hover:bg-violet-50/50'
+                        : 'border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-gray-100'
+                      } hover:shadow-md`
                 }`}
                 onClick={() => handleGroupSelect(group.group_id)}
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-gray-800 truncate">{group.title || 'Без названия'}</h4>
+                    <h4 className="font-semibold text-black truncate">{group.title || 'Без названия'}</h4>
                     {group.description && (
                       <p className="text-sm text-gray-600 mt-1 line-clamp-2">{group.description}</p>
                     )}
@@ -300,20 +302,20 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
                   <div className="flex flex-col items-end gap-2 ml-4">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
                       group.enabled 
-                        ? 'bg-emerald-100 text-emerald-700' 
-                        : 'bg-red-100 text-red-700'
+                        ? `${role === 'teacher' ? 'bg-emerald-100 text-emerald-700' : 'bg-emerald-100 text-emerald-700'}` 
+                        : `${role === 'teacher' ? 'bg-red-100 text-red-700' : 'bg-red-100 text-red-700'}`
                     }`}>
                       {group.enabled ? '✅ Активна' : '❌ Отключена'}
                     </span>
                     
                     <div className="flex gap-1">
                       {group.is_main_group && (
-                        <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded-lg text-xs font-medium">
+                        <span className={`${role === 'teacher' ? 'bg-violet-100 text-violet-700' : 'bg-purple-100 text-purple-700'} px-2 py-1 rounded-lg text-xs font-medium`}>
                           Основная
                         </span>
                       )}
                       {group.is_study_group && (
-                        <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-lg text-xs font-medium">
+                        <span className={`${role === 'teacher' ? 'bg-blue-100 text-blue-700' : 'bg-blue-100 text-blue-700'} px-2 py-1 rounded-lg text-xs font-medium`}>
                           Учебная
                         </span>
                       )}
@@ -324,7 +326,7 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
                         e.stopPropagation();
                         handleDeleteGroup(group.group_id);
                       }}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-red-500 hover:text-red-700 p-2 rounded-lg hover:bg-red-50"
+                      className={`opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${role === 'teacher' ? 'text-red-600 hover:text-red-700 hover:bg-red-50' : 'text-red-500 hover:text-red-700 hover:bg-red-50'} p-2 rounded-lg`}
                       title="Удалить группу"
                     >
                       🗑️
@@ -359,7 +361,7 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
 
           {selectedGroup ? (
             <div className="space-y-6">
-              <div className="bg-gradient-to-r from-gray-50 to-blue-50/50 rounded-2xl p-6 border border-gray-200">
+              <div className={`${role === 'teacher' ? 'bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200' : 'bg-gradient-to-r from-gray-50 to-blue-50/50 border-gray-200'} rounded-2xl p-6 border`}>
                 <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
                   <span>ℹ️</span>
                   Основная информация
@@ -396,7 +398,7 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50/50 rounded-2xl p-6 border border-purple-200">
+              <div className={`${role === 'teacher' ? 'bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200' : 'bg-gradient-to-r from-purple-50 to-pink-50/50 border-purple-200'} rounded-2xl p-6 border`}>
                 <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
                   <span>🏷️</span>
                   Свойства группы
@@ -423,19 +425,19 @@ export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
               </div>
 
               {(groupUsers && groupUsers.length > 0) && (
-                <div className="bg-gradient-to-r from-emerald-50 to-teal-50/50 rounded-2xl p-6 border border-emerald-200">
+                <div className={`${role === 'teacher' ? 'bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-200' : 'bg-gradient-to-r from-emerald-50 to-teal-50/50 border-emerald-200'} rounded-2xl p-6 border`}>
                   <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
                     <span>👥</span>
                     Пользователи группы ({groupUsers?.length || 0})
                   </h4>
                   <div className="space-y-3 max-h-64 overflow-y-auto">
                     {(groupUsers || []).map((user) => (
-                      <div key={user.user_id} className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                      <div key={user.user_id} className={`${role === 'teacher' ? 'bg-white border-gray-200' : 'bg-white border-gray-200'} rounded-xl p-4 border shadow-sm`}>
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-semibold text-gray-800">{user.login}</p>
-                            {user.fio && <p className="text-sm text-gray-600">{user.fio}</p>}
-                            {user.position && <p className="text-xs text-gray-500">{user.position}</p>}
+                            {user.fio && <p className="text-gray-600">{user.fio}</p>}
+                            {user.position && <p className="text-gray-500">{user.position}</p>}
                           </div>
                           <div className="flex flex-wrap gap-1 justify-end">
                             {user.is_admin && (

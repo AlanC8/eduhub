@@ -14,15 +14,9 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { href: '/',                   icon: 'dashboard',              label: 'Главная',   roles: ['student', 'admin'] },
-  { href: '/study',              icon: 'school',                 label: 'Учёба',     roles: ['student', 'admin'] },
+  { href: '/student_register',              icon: 'school',                 label: 'Оценки',     roles: ['student', 'admin'] },
   { href: '/indcur',             icon: 'checklist',              label: 'ИУП',       roles: ['student', 'admin'] },
   { href: '/schedule',           icon: 'schedule',               label: 'Расписание', roles: ['student', 'teacher', 'admin'] },
-  { href: '/academic-calendar',  icon: 'calendar_month',         label: 'Календарь', roles: ['student', 'teacher', 'admin'] },
-  { href: '/materials',          icon: 'auto_stories',           label: 'Материалы', roles: ['student', 'teacher', 'admin'] },
-  { href: '/people',             icon: 'groups',                 label: 'Люди',      roles: ['student', 'teacher', 'admin'] },
-  { href: '/mail',               icon: 'email',                  label: 'Почта',     roles: ['student', 'teacher', 'admin'] },
-  { href: '/finance',            icon: 'account_balance_wallet', label: 'Финансы',   roles: ['admin'] },
-  { href: '/services',           icon: 'apps',                   label: 'Сервисы',   roles: ['student', 'teacher', 'admin'] },
   { href: '/teacher',            icon: 'assignment_ind',         label: 'Препод.',   roles: ['teacher', 'admin'] },
   { href: '/admin',              icon: 'admin_panel_settings',   label: 'Админ',     roles: ['admin'] },
 ];
