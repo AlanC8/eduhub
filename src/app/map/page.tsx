@@ -51,31 +51,31 @@ export default function SiteMap() {
                 <div className="p-5">
                   <ul className="space-y-2">
                     <li>
-                      <Link href="#" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
+                      <Link href="/academic-calendar" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
                         <span className="material-icons-round text-gray-400 mr-3 group-hover:text-primary transition-colors">calendar_month</span>
                         <span>Академический календарь</span>
                       </Link>
                     </li>
                     <li>
-                      <Link href="#" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
+                      <Link href="/indcur" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
                         <span className="material-icons-round text-gray-400 mr-3 group-hover:text-primary transition-colors">checklist</span>
                         <span>Индивидуальный учебный план</span>
                       </Link>
                     </li>
                     <li>
-                      <Link href="#" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
+                      <Link href="/study-rooms" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
                         <span className="material-icons-round text-gray-400 mr-3 group-hover:text-primary transition-colors">meeting_room</span>
                         <span>Учебная аудитория</span>
                       </Link>
                     </li>
                     <li>
-                      <Link href="#" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
+                      <Link href="/schedule" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
                         <span className="material-icons-round text-gray-400 mr-3 group-hover:text-primary transition-colors">schedule</span>
                         <span>Расписание</span>
                       </Link>
                     </li>
                     <li>
-                      <Link href="#" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
+                      <Link href="/student_register" className="flex items-center py-2 px-3 rounded-xl hover:bg-blue-50 transition-colors group">
                         <span className="material-icons-round text-gray-400 mr-3 group-hover:text-primary transition-colors">insert_chart</span>
                         <span>Журнал оценок</span>
                       </Link>

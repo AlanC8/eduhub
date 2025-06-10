@@ -82,3 +82,78 @@ export interface UserGroupsResponse {
   data: Group[];
   total: number;
 }
+
+// Educational Programs API Types
+export interface EducationalProgram {
+  author: string;
+  author_modified: string;
+  created: string;
+  department_id: number;
+  description: string;
+  educational_program_id: number;
+  enabled: boolean;
+  modified: string;
+  title: string;
+}
+
+export interface EducationalProgramsListResponse {
+  data: EducationalProgram[];
+  total: number;
+}
+
+export interface EducationalProgramDetailResponse {
+  data: EducationalProgram;
+}
+
+export interface EducationalProgramCreateRequest {
+  author: string;
+  author_modified: string;
+  department_id: number;
+  description: string;
+  enabled: boolean;
+  title: string;
+}
+
+// Disciplines API Types
+export interface Discipline {
+  author: string;
+  author_modified: string;
+  computer: boolean;
+  created: string;
+  description: string;
+  discipline_id: number;
+  educational_program_id: number;
+  enabled: boolean;
+  labs: number;
+  lectures: number;
+  modified: string;
+  online: boolean;
+  practices: number;
+  title: string;
+}
+
+export interface DisciplinesListResponse {
+  data: Discipline[];
+  total: number;
+}
+
+export interface DisciplineDetailResponse {
+  data: Discipline;
+}
+
+export interface DisciplineCreateRequest {
+  author: string;
+  author_modified: string;
+  computer: boolean;
+  description: string;
+  educational_program_id: number;
+  enabled: boolean;
+  labs: number;
+  lectures: number;
+  online: boolean;
+  practices: number;
+  title: string;
+}
+
+// Re-export assignments types
+export * from './assignments';

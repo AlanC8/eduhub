@@ -212,7 +212,7 @@ export default function ApiTester() {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">🧪 Автоматический API Тестер</h2>
+      <h2 className="text-2xl text-black font-bold mb-6">🧪 Автоматический API Тестер</h2>
       
       {/* Статистика */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -355,7 +355,7 @@ export default function ApiTester() {
                     <summary className="cursor-pointer text-gray-600 hover:text-gray-800">
                       Показать данные ответа
                     </summary>
-                    <pre className="mt-2 p-3 bg-gray-100 rounded text-xs overflow-x-auto">
+                    <pre className="mt-2 p-3 text-black bg-gray-100 rounded text-xs overflow-x-auto">
                       {JSON.stringify(result.data, null, 2)}
                     </pre>
                   </details>

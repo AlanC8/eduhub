@@ -8,10 +8,11 @@ import Footer from '../components/Footer';
 import ProtectedRoute from '../components/ProtectedRoute';
 import UsersExample from '../components/UsersExample';
 import GroupsExample from '../components/GroupsExample';
+import DisciplinesExample from '../components/DisciplinesExample';
 import ApiTester from '../components/ApiTester';
 
 export default function AdminHome() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'users' | 'groups' | 'api-test'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'users' | 'groups' | 'disciplines' | 'api-test'>('dashboard');
 
   /* «живые» метрики */
   const stats = [
@@ -63,6 +64,13 @@ export default function AdminHome() {
       icon: '👥', 
       color: 'purple',
       action: () => setActiveTab('groups')
+    },
+    { 
+      title: 'Управление дисциплинами', 
+      description: 'Создать и настроить учебные дисциплины',
+      icon: '📚', 
+      color: 'emerald',
+      action: () => setActiveTab('disciplines')
     },
     { 
       title: 'API Тестирование', 
@@ -262,6 +270,7 @@ export default function AdminHome() {
                 { key: 'dashboard', label: 'Дашборд', icon: '📊' },
                 { key: 'users', label: 'Пользователи', icon: '👥' },
                 { key: 'groups', label: 'Группы', icon: '🏫' },
+                { key: 'disciplines', label: 'Дисциплины', icon: '📚' },
                 { key: 'api-test', label: 'API Тесты', icon: '🧪' }
               ].map(({ key, label, icon }) => (
                 <button
@@ -291,6 +300,11 @@ export default function AdminHome() {
               {activeTab === 'groups' && (
                 <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
                   <GroupsExample />
+                </div>
+              )}
+              {activeTab === 'disciplines' && (
+                <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+                  <DisciplinesExample />
                 </div>
               )}
               {activeTab === 'api-test' && (

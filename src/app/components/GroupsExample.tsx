@@ -4,7 +4,11 @@ import { useEffect, useState } from 'react';
 import { useGroups } from '../hooks/useGroups';
 import { GroupCreateRequest } from '../../types';
 
-export default function GroupsExample() {
+interface GroupsExampleProps {
+  role?: 'teacher' | 'admin';
+}
+
+export default function GroupsExample({ role = 'admin' }: GroupsExampleProps) {
   const { 
     groups, 
     selectedGroup, 
@@ -91,9 +95,22 @@ export default function GroupsExample() {
     }
   };
 
+  // Conditional styles based on role
+  const containerStyles = role === 'teacher' 
+    ? "bg-white rounded-3xl shadow-soft" 
+    : "p-8 max-w-7xl mx-auto";
+
+  const cardStyles = role === 'teacher'
+    ? "bg-white rounded-2xl shadow-md border border-gray-100"
+    : "bg-white rounded-3xl shadow-xl border border-gray-100";
+
+  const buttonGradient = role === 'teacher'
+    ? "from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700"
+    : "from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700";
+
   if (error) {
     return (
-      <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+      <div className={`p-4 bg-red-50 border border-red-200 rounded-lg ${role === 'teacher' ? 'mx-6' : ''}`}>
         <h3 className="text-red-800 font-medium">Ошибка</h3>
         <p className="text-red-600">{error}</p>
         <button 
@@ -107,7 +124,7 @@ export default function GroupsExample() {
   }
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className={containerStyles}>
       <div className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-3xl font-bold text-gray-800 mb-2">Управление группами</h2>
@@ -115,7 +132,7 @@ export default function GroupsExample() {
         </div>
         <button
           onClick={() => setShowCreateForm(!showCreateForm)}
-          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+          className={`flex items-center gap-2 px-6 py-3 bg-gradient-to-r ${buttonGradient} text-white rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg`}
         >
           <span className="text-lg">{showCreateForm ? '✕' : '➕'}</span>
           {showCreateForm ? 'Отмена' : 'Создать группу'}
@@ -133,7 +150,7 @@ export default function GroupsExample() {
 
       {/* Форма создания группы */}
       {showCreateForm && (
-        <div className="bg-gradient-to-br from-white to-blue-50/30 rounded-3xl shadow-xl border border-blue-100 p-8 mb-8">
+        <div className={`${role === 'teacher' ? 'bg-white' : 'bg-gradient-to-br from-white to-blue-50/30'} rounded-3xl shadow-xl border border-blue-100 p-8 mb-8`}>
           <div className="flex items-center gap-3 mb-6">
             <div className="text-3xl">✨</div>
             <div>
@@ -247,7 +264,7 @@ export default function GroupsExample() {
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Список групп */}
-        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
+        <div className={cardStyles + " p-6"}>
           <div className="flex items-center gap-3 mb-6">
             <div className="text-2xl">🏫</div>
             <div>
@@ -257,12 +274,16 @@ export default function GroupsExample() {
           </div>
           
           <div className="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar">
-            {groups.map((group) => (
+            {(groups || []).map((group) => (
               <div 
                 key={group.group_id}
                 className={`group relative overflow-hidden rounded-2xl p-4 border-2 cursor-pointer transition-all duration-300 ${
                   selectedGroupId === group.group_id 
-                    ? 'border-blue-300 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-lg transform scale-105' 
+                    ? `border-${role === 'teacher' ? 'violet' : 'blue'}-300 bg-gradient-to-r ${
+                        role === 'teacher' 
+                          ? 'from-violet-50 to-purple-50'
+                          : 'from-blue-50 to-indigo-50'
+                      } shadow-lg transform scale-105` 
                     : 'border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-gray-100 hover:shadow-md'
                 }`}
                 onClick={() => handleGroupSelect(group.group_id)}
@@ -316,7 +337,7 @@ export default function GroupsExample() {
         </div>
 
         {/* Детали группы */}
-        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
+        <div className={cardStyles + " p-6"}>
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-3">
               <div className="text-2xl">📋</div>
@@ -401,14 +422,14 @@ export default function GroupsExample() {
                 </div>
               </div>
 
-              {groupUsers.length > 0 && (
+              {(groupUsers && groupUsers.length > 0) && (
                 <div className="bg-gradient-to-r from-emerald-50 to-teal-50/50 rounded-2xl p-6 border border-emerald-200">
                   <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
                     <span>👥</span>
-                    Пользователи группы ({groupUsers.length})
+                    Пользователи группы ({groupUsers?.length || 0})
                   </h4>
                   <div className="space-y-3 max-h-64 overflow-y-auto">
-                    {groupUsers.map((user) => (
+                    {(groupUsers || []).map((user) => (
                       <div key={user.user_id} className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
                         <div className="flex justify-between items-start">
                           <div>

@@ -107,12 +107,12 @@ export default function UsersExample() {
             <div className="text-2xl">👤</div>
             <div>
               <h3 className="text-xl font-bold text-gray-800">Список пользователей</h3>
-              <p className="text-gray-600">Активных пользователей: {users.filter(u => u.enabled).length}</p>
+              <p className="text-gray-600">Активных пользователей: {(users || []).filter(u => u.enabled).length}</p>
             </div>
           </div>
           
           <div className="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar">
-            {users.map((user) => {
+            {(users || []).map((user) => {
               const role = getUserRole(user);
               return (
                 <div 
@@ -279,14 +279,14 @@ export default function UsersExample() {
               </div>
 
               {/* Группы пользователя */}
-              {userGroups.length > 0 ? (
+              {(userGroups && userGroups.length > 0) ? (
                 <div className="bg-gradient-to-r from-emerald-50 to-teal-50/50 rounded-2xl p-6 border border-emerald-200">
                   <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
                     <span>🏫</span>
-                    Участие в группах ({userGroups.length})
+                    Участие в группах ({userGroups?.length || 0})
                   </h4>
                   <div className="space-y-3 max-h-64 overflow-y-auto custom-scrollbar">
-                    {userGroups.map((group) => (
+                    {(userGroups || []).map((group) => (
                       <div key={group.group_id} className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
                         <div className="flex justify-between items-start">
                           <div>

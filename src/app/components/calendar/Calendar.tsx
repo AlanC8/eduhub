@@ -1,63 +1,66 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import type { EventClickArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import ruLocale from '@fullcalendar/core/locales/ru';
+import { useSchedule } from '@/hooks/useSchedule';
+import type { Schedule } from '@/service/ScheduleService';
 
-/* ——— label ↔︎ view map ——— */
 const VIEWS = {
   dayGridMonth: 'Месяц',
   timeGridWeek: 'Неделя',
   timeGridDay:  'День',
 } as const;
 
-/* ——— WEEKLY CS SCHEDULE @ IITU ———
-   daysOfWeek: 1-пон, 2-вт, 3-ср, 4-чт, 5-пт
-   startRecur / endRecur — границы семестра               */
-const seedEvents = [
-  /* Monday */
-  { title: 'Дискретная математика',      daysOfWeek: [1], startTime: '09:00', endTime: '10:30' },
-  { title: 'Линейная алгебра',           daysOfWeek: [1], startTime: '10:45', endTime: '12:15' },
-  { title: 'Английский для IT',          daysOfWeek: [1], startTime: '13:00', endTime: '14:30' },
-  { title: 'Английский для IT',          daysOfWeek: [1], startTime: '14:45', endTime: '16:15' },
-  { title: 'Английский для IT',          daysOfWeek: [1], startTime: '16:30', endTime: '18:00' },
-  /* Tuesday */
-  { title: 'Алгоритмы и структуры данных', daysOfWeek: [2], startTime: '09:00', endTime: '10:30' },
-  { title: 'Операционные системы',         daysOfWeek: [2], startTime: '10:45', endTime: '12:15' },
-
-  /* Wednesday */
-  { title: 'Базы данных',                daysOfWeek: [3], startTime: '09:00', endTime: '10:30' },
-  { title: 'Теория вероятностей',        daysOfWeek: [3], startTime: '10:45', endTime: '12:15' },
-  { title: 'Теория вероятностей',        daysOfWeek: [3], startTime: '12:30', endTime: '14:00' },
-  { title: 'Теория вероятностей',        daysOfWeek: [3], startTime: '14:15', endTime: '15:45' },
-  /* Thursday */
-  { title: 'Компьютерные сети',          daysOfWeek: [4], startTime: '09:00', endTime: '10:30' },
-  { title: 'Лабораторная по ИБ',         daysOfWeek: [4], startTime: '13:00', endTime: '14:40' },
-
-  /* Friday */
-  { title: 'Веб-технологии',             daysOfWeek: [5], startTime: '09:00', endTime: '10:30' },
-  { title: 'Проектный семинар',          daysOfWeek: [5], startTime: '10:45', endTime: '12:15' },
-
-  /* one-off deadline example */
-  { title: 'Сдача курсовой',             start: '2025-05-20', allDay: true },
-];
-
-/* ———————————————————————————————————— */
-
 export default function Calendar() {
   const calRef = useRef<FullCalendar | null>(null);
-  const api     = () => calRef.current?.getApi();
+  const api = () => calRef.current?.getApi();
   const [view, setView] = useState<keyof typeof VIEWS>('timeGridWeek');
   const [modal, setModal] = useState<EventClickArg | null>(null);
+
+  const { schedule, loading, error, total } = useSchedule();
+
+  const calendarEvents = useMemo(() => {
+    return schedule.map((item: Schedule) => ({
+      title: item.title || 'Без названия',
+      daysOfWeek: [item.day], // day is 1-7 in both FullCalendar and our API
+      startTime: `${String(item.start_time_num).padStart(2, '0')}:00`,
+      endTime: `${String(item.end_time_num).padStart(2, '0')}:00`,
+      extendedProps: {
+        discipline_id: item.discipline_id,
+        group_id: item.group_id,
+        room_id: item.room_id,
+        teacher_id: item.teacher_id
+      }
+    }));
+  }, [schedule]);
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-gray-200 bg-white shadow-xs p-8 flex justify-center items-center">
+        <div className="flex items-center gap-3">
+          <div className="animate-spin rounded-full h-5 w-5 border-2 border-violet-600 border-t-transparent"></div>
+          <span className="text-gray-600">Загрузка расписания...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-2xl border border-red-200 bg-white shadow-xs p-8">
+        <div className="text-red-600">Ошибка загрузки расписания: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <>
       <div className="rounded-2xl border border-gray-200 bg-white shadow-xs overflow-hidden flex flex-col">
-        {/* top bar */}
         <header className="flex justify-between items-center px-4 py-3 border-b border-gray-200">
           <div className="flex items-center gap-2">
             {['chevron_left', 'chevron_right'].map((ic, i) => (
@@ -107,10 +110,11 @@ export default function Calendar() {
           headerToolbar={false}
           height="auto"
           allDaySlot={false}
+          slotMinTime="08:00:00"
           dayMaxEvents
           nowIndicator
           selectable
-          events={seedEvents}
+          events={calendarEvents}
           eventClassNames="!bg-violet-600/90 !border-violet-600 !text-violet-700 hover:!bg-violet-600/80"
           eventClick={(arg) => setModal(arg)}
         />
@@ -132,20 +136,17 @@ export default function Calendar() {
                 ? 'Событие на весь день'
                 : `${modal.event.startStr.replace('T', ' ')} – ${modal.event.endStr?.replace('T', ' ')}`}
             </p>
+            <div className="text-sm text-gray-600">
+              <p>Аудитория: {modal.event.extendedProps.room_id || 'Онлайн'}</p>
+              <p>Группа: {modal.event.extendedProps.group_id}</p>
+            </div>
 
             <div className="flex justify-end gap-2 pt-1">
-              <button
-                aria-label="Удалить"
-                onClick={() => { modal.event.remove(); setModal(null); }}
-                className="flex h-8 w-8 items-center justify-center rounded-md text-red-600 hover:bg-red-600/10 transition"
-              >
-                <span className="material-icons-round">delete</span>
-              </button>
               <button
                 onClick={() => setModal(null)}
                 className="px-4 py-1.5 rounded-md bg-violet-600 text-white hover:bg-violet-700"
               >
-                Ок
+                Закрыть
               </button>
             </div>
           </div>
