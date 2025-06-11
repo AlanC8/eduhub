@@ -1,11 +1,9 @@
-// app/assignments/page.tsx
 'use client';
 
 import React, { useState } from 'react';
 import { useAssignments } from '@/hooks/useAssignments';
 import type { Assignment, AssignmentFile, Submission, SubmissionFile, AssignmentFilter } from '@/types';
 
-// Иконки
 import {
   Home, ChevronRight, ListChecks, Clock, CheckCircle, AlertTriangle, AlertCircle as AlertInfo,
   Paperclip, Download, MessageSquare, UploadCloud, Send, Eye, FileText, Edit2, Trash2, X, User, CalendarDays, Star
@@ -14,7 +12,6 @@ import { format, parseISO, differenceInDays, formatDistanceToNowStrict } from 'd
 import { ru } from 'date-fns/locale';
 import { Toast } from '@/components/Toast';
 
-// Фильтры для UI
 const filterOptions: { label: string; value: AssignmentFilter, icon: React.ElementType }[] = [
   { label: 'Предстоящие', value: 'upcoming', icon: Clock },
   { label: 'Просроченные', value: 'late', icon: AlertTriangle },
@@ -22,7 +19,6 @@ const filterOptions: { label: string; value: AssignmentFilter, icon: React.Eleme
   { label: 'Все задания', value: 'all', icon: ListChecks },
 ];
 
-// Компонент для отображения одного файла
 const FileChip: React.FC<{ file: AssignmentFile | SubmissionFile; onDownload: (fileId: number, filename: string) => void; type?: 'assignment' | 'submission' }> = ({ file, onDownload, type = 'assignment' }) => {
   const getFileIcon = (filename: string) => {
     const ext = filename.split('.').pop()?.toLowerCase();
@@ -30,7 +26,7 @@ const FileChip: React.FC<{ file: AssignmentFile | SubmissionFile; onDownload: (f
     if (['doc', 'docx'].includes(ext || '')) return <FileText className="text-blue-500" size={18} />;
     if (['xls', 'xlsx'].includes(ext || '')) return <FileText className="text-green-500" size={18} />;
     if (['ppt', 'pptx'].includes(ext || '')) return <FileText className="text-orange-500" size={18} />;
-    if (['jpg', 'jpeg', 'png', 'gif'].includes(ext || '')) return <Paperclip className="text-purple-500" size={18} />; // Можно использовать иконку изображения
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(ext || '')) return <Paperclip className="text-purple-500" size={18} />; 
     return <Paperclip className="text-gray-500" size={18} />;
   };
 
@@ -49,7 +45,6 @@ const FileChip: React.FC<{ file: AssignmentFile | SubmissionFile; onDownload: (f
   );
 };
 
-// Компонент для отображения одного задания
 export const AssignmentCard: React.FC<{
   assignment: Assignment;
   onViewDetails: (assignmentId: number) => void;
@@ -102,7 +97,7 @@ export const AssignmentCard: React.FC<{
       statusIcon = AlertTriangle;
     } else {
       statusText = `Осталось: ${formatDistanceToNowStrict(deadlineDate, { addSuffix: false, locale: ru })}`;
-      if (daysLeft < 0) statusText = "Дедлайн сегодня"; // Не совсем точно, но для примера
+      if (daysLeft < 0) statusText = "Дедлайн сегодня"; 
       else if (daysLeft < 3) statusColor = 'bg-orange-100 text-orange-700';
       else statusColor = 'bg-blue-100 text-blue-700';
       statusIcon = Clock;
@@ -190,7 +185,6 @@ export const AssignmentCard: React.FC<{
   );
 };
 
-// Модальное окно для деталей задания
 export const AssignmentDetailModal: React.FC<{
   assignment: Assignment | null;
   isOpen: boolean;
@@ -222,7 +216,7 @@ export const AssignmentDetailModal: React.FC<{
 
           {assignment.files && assignment.files.length > 0 && (
             <div>
-              <h4 className="text-md font-semibold text-black mb-2">Файлы задания:</h4>
+              <h4 className="text-md font-semibold text-black mb-2">Файлы задания:</h4> 
               <div className="space-y-2">
                 {assignment.files.map(file => <FileChip key={file.fileId} file={file} onDownload={onDownloadFile} />)}
               </div>
@@ -266,7 +260,6 @@ export const AssignmentDetailModal: React.FC<{
   );
 };
 
-// Модальное окно для сдачи задания (упрощенное)
 const SubmitAssignmentModal: React.FC<{
     assignmentId: number | null;
     isOpen: boolean;
@@ -281,7 +274,7 @@ const SubmitAssignmentModal: React.FC<{
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         onSubmit(assignmentId, comment, selectedFiles);
-        onClose(); // Закрыть после попытки отправки
+        onClose(); 
     };
 
     return (
@@ -339,9 +332,7 @@ const SubmitAssignmentModal: React.FC<{
 };
 
 
-// Основной компонент страницы
 const AssignmentsPage: React.FC = () => {
-  // TODO: Get these from context or props
   const studentId = 2; // Temporary hardcoded value
   const disciplineId = 3; // Temporary hardcoded value
 
@@ -392,7 +383,6 @@ const AssignmentsPage: React.FC = () => {
         });
       }
 
-      // TODO: Раскомментировать когда сервис будет работать
       /* 
       const response = await fetch('http://localhost:8081/submissions', {
         method: 'POST',
@@ -409,7 +399,6 @@ const AssignmentsPage: React.FC = () => {
       const result = await response.json();
       */
 
-      // Имитация успешного сохранения
       console.log('Имитация отправки задания:', {
         studentId,
         assignmentId,
@@ -417,7 +406,6 @@ const AssignmentsPage: React.FC = () => {
         filesCount: files ? files.length : 0
       });
 
-      // Создаем фиктивный submission для имитации успешной отправки
       const mockSubmission = {
         submissionId: Math.floor(Math.random() * 1000),
         studentId: studentId,
@@ -435,17 +423,14 @@ const AssignmentsPage: React.FC = () => {
         })) : []
       };
 
-      // Обновляем состояние задания в UI
       const updatedAssignment = assignments.find(a => a.assignmentId === assignmentId);
       if (updatedAssignment) {
         updatedAssignment.currentUserSubmission = mockSubmission;
       }
 
-      // Имитация успешного обновления
       await getAssignmentById(assignmentId);
       handleCloseSubmitModal();
       
-      // Показываем уведомление об успехе
       setToastMessage('Задание успешно отправлено!');
       setToastType('success');
       setShowToast(true);
@@ -490,8 +475,7 @@ const AssignmentsPage: React.FC = () => {
                 </button>
               ))}
             </div>
-          </div>
-           {/* TODO: Добавить селект для дисциплины, если их несколько */}
+          </div>                
         </header>
 
         {loading && (
@@ -530,7 +514,7 @@ const AssignmentsPage: React.FC = () => {
                 onViewDetails={handleViewDetails}
                 onDownloadFile={downloadAssignmentFile}
                 onSubmitAssignment={handleOpenSubmitModal}
-                onDelete={() => {}} // Placeholder for delete functionality
+                    onDelete={() => {}} 
                 isTeacherView={false}
               />
             ))}

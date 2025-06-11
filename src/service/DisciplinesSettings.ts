@@ -21,7 +21,6 @@ class DisciplinesSettings {
     return DisciplinesSettings.instance;
   }
 
-  // === DISCIPLINES ===
 
   /**
    * Получить список всех дисциплин

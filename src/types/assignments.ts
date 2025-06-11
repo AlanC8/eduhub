@@ -1,4 +1,3 @@
-// Types for assignments functionality
 
 export interface AssignmentFile {
   fileId: number;

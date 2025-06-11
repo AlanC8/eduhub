@@ -6,17 +6,15 @@ import Interceptor from "@/service/Interceptor";
 import useRequest from "@/app/hooks/useRequest";
 import { LoginApiResponse, LoginFormState } from "@/types";
 
-// Для иконок лучше использовать SVG или специализированную библиотеку (Lucide, Heroicons)
-// Здесь для примера будут строки Material Icons, но представь, что это более стильные иконки
 const IconMail = () => <span className="material-icons-round text-lg">alternate_email</span>;
-const IconLock = () => <span className="material-icons-round text-lg">lock_open</span>; // или lock
+const IconLock = () => <span className="material-icons-round text-lg">lock_open</span>; 
 const IconEye = () => <span className="material-icons-round text-lg">visibility</span>;
 const IconEyeSlash = () => <span className="material-icons-round text-lg">visibility_off</span>;
 const IconArrowRight = ({ className }: { className?: string }) => (
   <span className={`material-icons-round text-lg ${className || ''}`}>arrow_forward</span>
 );
-const IconSpinner = () => <span className="material-icons-round animate-spin text-lg">sync</span>; // более подходящая иконка
-const IconAlertTriangle = () => <span className="material-icons-round text-lg">warning_amber</span>; // или report_problem
+const IconSpinner = () => <span className="material-icons-round animate-spin text-lg">sync</span>; 
+const IconAlertTriangle = () => <span className="material-icons-round text-lg">warning_amber</span>; 
 
 export default function Login() {
   const router = useRouter();
@@ -25,7 +23,7 @@ export default function Login() {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true); // Часто "запомнить меня" включено по умолчанию
+  const [rememberMe, setRememberMe] = useState(true); 
   const [currentLanguage, setCurrentLanguage] = useState("Русский");
 
   const {
@@ -46,7 +44,6 @@ export default function Login() {
     e.preventDefault();
     if (!form.login || !form.password) return;
   
-    // 👇 переименовываем login → login
     const payload = { login: form.login, password: form.password };
   
     try {
@@ -57,7 +54,6 @@ export default function Login() {
       
       console.log('Login API response:', response);
       
-      // useRequest возвращает response.data напрямую, не response.data.data
       if (response?.data?.token) {
         console.log('Token found, saving data...');
         console.log('Response data:', response.data);
@@ -72,7 +68,6 @@ export default function Login() {
         console.log('Token saved:', response.data.token);
         console.log('User ID saved:', response.data.user_id);
         
-        // Роутинг в зависимости от роли
         switch (response.data.role) {
           case "admin":
             console.log('Redirecting to /admin');
@@ -109,15 +104,12 @@ export default function Login() {
 
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row font-sans antialiased">
-      {/* Левая, "брендовая" часть */}
       <div className="hidden lg:flex lg:w-1/2 bg-slate-900 text-white p-12 xl:p-20 flex-col justify-between relative overflow-hidden">
-        {/* Декоративные элементы - очень тонкие, абстрактные */}
         <div className="absolute -top-20 -left-20 w-72 h-72 bg-primary/10 rounded-full opacity-50 mix-blend-screen animate-pulse-slow"></div>
         <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-secondary/10 rounded-full opacity-40 mix-blend-screen animation-delay-2000 animate-pulse-slower"></div>
 
         <div className="z-10">
           <Link href="/" className="inline-flex items-center space-x-2.5 group mb-24">
-            {/* Лого - очень чистое */}
             <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center 
                             group-hover:scale-110 group-hover:rotate-[-12deg] transition-transform duration-300 ease-out">
               <span className="text-2xl font-bold text-slate-900">E</span>
@@ -140,7 +132,6 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Правая, "функциональная" часть - форма входа */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center bg-white dark:bg-slate-950 p-6 sm:p-10 xl:p-16">
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-10 text-center">
@@ -285,12 +276,11 @@ export default function Login() {
             </Link>
           </div>
 
-          {/* Переключатель языка - очень минималистичный */}
           <div className="mt-12 text-center">
             {["EN", "РУС"].map(lang => (
               <button 
                 key={lang}
-                onClick={() => setCurrentLanguage(lang === "РУС" ? "Русский" : "English")} // Упрощенная логика для примера
+                onClick={() => setCurrentLanguage(lang === "РУС" ? "Русский" : "English")} 
                 className={`px-2 py-1 text-xs transition-colors
                   ${(currentLanguage === "Русский" && lang === "РУС") || (currentLanguage === "English" && lang === "EN")
                     ? 'text-primary font-semibold' 

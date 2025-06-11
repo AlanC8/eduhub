@@ -2,9 +2,8 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import UsersService from '../../service/UsersService';
-import { UsersListResponse, UserDetailResponse, UserGroupsResponse, User, Group } from '../../types';
+import { User, Group } from '../../types';
 
-// Добавляем интерфейс для текущего пользователя
 interface CurrentUser {
   enabled: boolean;
   fio: string;
@@ -99,7 +98,7 @@ export const useUsers = () => {
       const response = await usersService.getUserById(userId);
       setState(prev => ({ 
         ...prev, 
-        selectedUser: response.data, 
+        selectedUser: response.data as User, 
         loading: false 
       }));
       return response;

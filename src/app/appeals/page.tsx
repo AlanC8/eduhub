@@ -74,7 +74,7 @@ const priorityLabels = {
 };
 
 export default function Appeals() {
-  const { currentUser, loading } = useUsers();
+  const { loading } = useUsers();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedAppeal, setSelectedAppeal] = useState<Appeal | null>(null);
   const [filter, setFilter] = useState('all');
@@ -104,7 +104,6 @@ export default function Appeals() {
           <Header activePage="appeals" />
 
           <div className="flex-1 p-6">
-            {/* Header section */}
             <div className="mb-8">
               <h1 className="text-2xl font-semibold text-gray-900">Обращения</h1>
               <p className="mt-1 text-sm text-gray-500">
@@ -112,7 +111,6 @@ export default function Appeals() {
               </p>
             </div>
 
-            {/* Controls */}
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
               <div className="flex flex-wrap items-center gap-3">
                 <button
@@ -158,7 +156,6 @@ export default function Appeals() {
               </button>
             </div>
 
-            {/* Appeals list */}
             <div className="grid gap-4">
               {filteredAppeals.map((appeal) => (
                 <div
@@ -188,7 +185,6 @@ export default function Appeals() {
               ))}
             </div>
 
-            {/* Create appeal modal */}
             {isCreateModalOpen && (
               <div className="fixed inset-0 z-50 overflow-y-auto">
                 <div className="flex min-h-screen items-center justify-center p-4">
@@ -266,7 +262,6 @@ export default function Appeals() {
               </div>
             )}
 
-            {/* View appeal modal */}
             {selectedAppeal && (
               <div className="fixed inset-0 z-50 overflow-y-auto">
                 <div className="flex min-h-screen items-center justify-center p-4">

@@ -1,4 +1,3 @@
-// app/calendar/page.tsx
 'use client';
 
 import { useRef, useState, useMemo, useEffect } from 'react';
@@ -11,16 +10,15 @@ import listPlugin from '@fullcalendar/list';
 import ruLocale from '@fullcalendar/core/locales/ru';
 import { format as formatDateFns, parseISO } from 'date-fns';
 import { ru as ruFnsLocale } from 'date-fns/locale';
-import { useSchedule } from '@/hooks/useSchedule'; // Убедитесь, что путь правильный
-import type { Schedule } from '@/service/ScheduleService'; // Убедитесь, что путь правильный
+import { useSchedule } from '@/hooks/useSchedule'; 
+import type { Schedule } from '@/service/ScheduleService'; 
 
-// Иконки Lucide
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, ListChecks, X as CloseIcon, MapPin, Users2, Info, AlertTriangle, Loader2 } from 'lucide-react';
 
 const VIEWS = {
   timeGridWeek: { label: 'Неделя', icon: <CalendarIcon size={16} /> },
   timeGridDay: { label: 'День', icon: <CalendarIcon size={16} /> },
-  dayGridMonth: { label: 'Месяц', icon: <CalendarIcon size={16} /> }, // Можно использовать другую иконку, если есть более подходящая для месяца
+  dayGridMonth: { label: 'Месяц', icon: <CalendarIcon size={16} /> }, 
   listWeek: { label: 'Список', icon: <ListChecks size={16} /> }
 } as const;
 
@@ -41,15 +39,15 @@ export default function CalendarPage() {
       const startTimeStr = formatDateFns(item.start_time, 'HH:mm');
       const endTimeStr = formatDateFns(item.end_time, 'HH:mm');
 
-      let eventColor = '#8b5cf6'; // Default: violet-500
-      if (item.room_id === 0) { // Онлайн
-        eventColor = '#7c3aed'; // violet-600
+      let eventColor = '#8b5cf6'; 
+      if (item.room_id === 0) { 
+        eventColor = '#7c3aed'; 
       } else if (item.title?.toLowerCase().includes('лекция')) {
-        eventColor = '#6d28d9'; // violet-700
+        eventColor = '#6d28d9'; 
       } else if (item.title?.toLowerCase().includes('практика') || item.title?.toLowerCase().includes('семинар')) {
-        eventColor = '#8b5cf6'; // violet-500
+        eventColor = '#8b5cf6'; 
       } else if (item.title?.toLowerCase().includes('лабораторная')) {
-        eventColor = '#9333ea'; // purple-600
+        eventColor = '#9333ea'; 
       }
 
       return {
@@ -79,7 +77,7 @@ export default function CalendarPage() {
     if (calendarApi?.view?.title) {
       setCalendarTitle(calendarApi.view.title);
     }
-  }, [currentView, calendarEvents]); // Обновляем при смене вида или обновлении событий
+  }, [currentView, calendarEvents]); 
 
   const handleDatesSet = (arg: DatesSetArg) => {
     if (arg.view.title) {
@@ -371,7 +369,7 @@ export default function CalendarPage() {
                 { icon: CalendarIcon, label: "Дата и время", value: `${formatDateFns(parseISO(modal.event.extendedProps.apiEvent.start_time), 'd MMMM yyyy, HH:mm', { locale: ruFnsLocale })} – ${formatDateFns(parseISO(modal.event.extendedProps.apiEvent.end_time), 'HH:mm', { locale: ruFnsLocale })}` },
                 { icon: MapPin, label: "Место", value: modal.event.extendedProps.room_id === 0 ? 'Онлайн занятие' : `Аудитория ${modal.event.extendedProps.room_id}` },
                 { icon: Users2, label: "Группа", value: modal.event.extendedProps.group_id },
-                { icon: Users2, label: "Преподаватель ID", value: modal.event.extendedProps.teacher_id }, // Можно заменить на ФИО если есть
+                { icon: Users2, label: "Преподаватель ID", value: modal.event.extendedProps.teacher_id }, 
                 modal.event.extendedProps.description && { icon: Info, label: "Описание", value: modal.event.extendedProps.description },
               ].filter(Boolean).map((item: any, index) => (
                 <div key={index} className="flex items-start gap-2.5 text-gray-700">
